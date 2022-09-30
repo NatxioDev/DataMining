@@ -1,0 +1,24 @@
+---
+title: "Practica"
+output: html_document
+date: "2022-09-28"
+---
+
+1. Usando los datos extraídos de https://www.worldometers.info/coronavirus/ sobre el Covid-19 mostrar los 10 países con más muertes.
+2. Usando los datos extraídos de https://www.worldometers.info/coronavirus/ sobre el Covid-19 mostrar la mediana de casos activos por millon según continente.
+3. Con la encuesta a hogares 2021 calcular el promedio de años de educación, mostrar los resultados por departamento, y dentro de cada departamento por sexo
+
+```{r}
+library(dplyr)
+library(haven)
+
+
+```
+
+4. Graficar en una nube de puntos los años de educación con los ingresos laborales de las personas entre 30 y 50 años. ¿Cuántos casos existen con información completa?
+5. Para la base de datos de equipamiento en las encuesta a hogares 2021, realice un pivot wide y luego un pivot long para identificar la tenencia y la cantidad de los 17 item de equipamiento.
+6. Calcule el porcentaje de hogares con acceso a internet en la vivienda, diferenciar los resultados según 1) el sexo del jefe/a de hogar y 2) Presencia de al menos un miembro en el hogar de 17 años o menos.
+
+```{r cars}
+summary(cars)
+```
