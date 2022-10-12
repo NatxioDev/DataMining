@@ -2,16 +2,72 @@
 title: "Practica"
 output: html_document
 date: "2022-09-28"
+editor_options:
+  chunk_output_type: console
 ---
 
 1. Usando los datos extraídos de https://www.worldometers.info/coronavirus/ sobre el Covid-19 mostrar los 10 países con más muertes.
+
+```{r}
+library(foreign)    # Importar bases de datos
+library(rvest)      # Scraping web
+library(haven)      # Importar bases de datos en otros formatos
+library(dplyr)
+
+link<-"https://www.worldometers.info/coronavirus/"
+web<-read_html(link)
+
+covid<-html_table(web)
+today_covid<-covid[[1]]
+View(today_covid)
+
+#today_covid$"#"
+
+covid_country <- filter(today_covid, today_covid$"#" != "NA") 
+
+covid_country %>% select(`Country,Other`, TotalCases, TotalDeaths)
+
+top_deaths <- covid_country %>% mutate(TotalDeaths = gsub(",","",TotalDeaths)) %>% mutate(Deaths = as.numeric(TotalDeaths)) %>% arrange(desc(Deaths))  %>% slice(1:10) %>% select(`Country,Other`, TotalCases, TotalDeaths, Deaths)
+
+```
+
+
 2. Usando los datos extraídos de https://www.worldometers.info/coronavirus/ sobre el Covid-19 mostrar la mediana de casos activos por millon según continente.
+
+```{r}
+
+covid_country %>% select(`Country,Other`,ActiveCases, Continent)
+
+covid_country <- covid_country %>% mutate(ActiveCases = gsub(",","",ActiveCases)) %>% mutate(IntActiveCases = as.numeric(ActiveCases))
+
+covid_country
+
+covid_country %>% group_by(Continent) %>% summarise(mean = mean(IntActiveCases,na.rm = TRUE), sum = sum(IntActiveCases,na.rm = TRUE), n = n()) %>% arrange(desc(sum))
+
+```
+
 3. Con la encuesta a hogares 2021 calcular el promedio de años de educación, mostrar los resultados por departamento, y dentro de cada departamento por sexo
 
 ```{r}
 library(dplyr)
 library(haven)
 
+EHTEST = read_sav("./data/EH2021_Persona.sav")
+
+
+View(EHTEST)
+
+EHTEST %>% select(s03a_02)
+
+EHTEST %>% group_by(depto)  %>% summarise(n(), mean(s03a_02a,na.rm = TRUE))
+
+```
+
+
+```{r}
+
+
+table(eh21di$s03a_02)
 
 ```
 

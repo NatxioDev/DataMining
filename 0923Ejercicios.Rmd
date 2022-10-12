@@ -34,7 +34,7 @@ eh21v %>% group_by(depto) %>% summarise(mean(tierra))
 
 eh21p %>% mutate(mujer=s01a_02==2, jefe=s01a_05==1) %>%
   filter(jefe==T) %>% select(folio, mujer, jefe) %>% inner_join(eh21v) %>%
-  group_by(mujer) %>% summarise(mean(tierra)*100)
+  group_by(depto,mujer) %>% summarise(mean(tierra)*100)
 
                           
 

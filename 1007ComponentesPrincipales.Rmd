@@ -1,0 +1,26 @@
+---
+title: "1007ComponentesPrincipales"
+output: html_document
+date: "2022-10-07"
+---
+ 
+``` {r}
+X <- USArrests
+X 
+
+
+sigma <- var(X)
+sigma
+
+lambda <- diag(eigen(sigma)$values)
+lambda
+
+A <- eigen(sigma)$vectors
+A
+lambda
+
+round(A%%t(A), 2)
+sigma
+A%%lambda%%t(A)
+
+```

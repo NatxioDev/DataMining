@@ -1,0 +1,51 @@
+---
+title: "1210Ejercicio"
+output: html_document
+date: "2022-10-12"
+---
+
+```{r setup, include=FALSE}
+
+library(foreign)    # Importar bases de datos
+library(rvest)      # Scraping web
+library(haven)      # Importar bases de datos en otros formatos
+library(dplyr)
+
+rm(list = ls())
+
+bd = read.csv("./data/en2020.csv", sep="|")
+
+```
+
+
+
+```{r setup, include=FALSE}
+
+names(bd) <- tolower(names(bd))
+names(bd)
+table(bd$nombre.pais)
+
+```
+
+
+```{r setup, include=FALSE}
+
+bdr <- bd %>% group_by(codigo.recinto,nombre.recinto) %>% summarise_at(vars(adn:blancos,nulos), sum)
+
+bdm <- bd %>% group_by(codigo.municipio,nombre.municipio) %>% summarise_at(vars(adn:blancos,nulos), sum)
+
+
+```
+
+# Modelado
+
+## Recinto
+
+```{r setup, include=FALSE}
+bdr <- bdr %>% select(-adn, -juntos, -libre.21)
+
+var(bdr[, -c(1:2)])
+cor(bdr[, -c(1:2)])
+
+
+```

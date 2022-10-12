@@ -1,0 +1,121 @@
+---
+title: "PrimerParcial"
+output: html_document
+date: "2022-09-30"
+editor_options:
+  chunk_output_type: console
+---
+
+```{r}
+library(foreign)    # Importar bases de datos
+library(rvest)      # Scraping web
+library(haven)      # Importar bases de datos en otros formatos
+library(dplyr)
+library(readxl)
+library(tidyr)
+
+
+```
+
+Pregunta 1.
+
+```{r setup, include=FALSE}
+
+bdp1 <- read_excel("./data/3080216.xlsx", sheet=1, range="B5:Q96")
+
+bdp1 %>% pivot_longer(cols=c('2006', '2007'),
+                    names_to='year',
+                    values_to='dpto')
+
+
+```
+
+Pregunta 3
+
+```{r setup, include=FALSE}
+
+table(eh21p$s03a_02c)
+
+#MAYOR 15 ANOS
+
+eh21p %>% mutate(edadm15 = s01a_03 >= 15, mujer=s01a_02==2) %>% filter(edadm15) %>%  group_by(area, mujer)  %>% summarise( mean(s03a_02c,na.rm = TRUE))
+
+
+#MAYOR MAXIMO
+
+eh21p %>% mutate(max = max(s01a_03), mujer=s01a_02==2) %>% group_by(area, mujer)  %>% summarise( mean(s03a_02c,na.rm = TRUE))
+
+```
+
+Pregunta 4:
+
+```{r}
+table(eh21v$s07a_09)
+
+
+#VIVIENDA CON PISO DE TIERRA
+table(eh21v$s07a_09)
+
+eh21v %>% mutate(tierra=s07a_09 == 1) %>% summarise(mean(tierra))
+
+eh21v <- eh21v %>% mutate(tierra=s07a_09 == 1)
+
+eh21v %>% group_by(area) %>% summarise(mean(tierra))
+
+eh21v %>% group_by(depto) %>% summarise(mean(tierra))
+
+eh21p %>% mutate(mujer=s01a_02==2, jefe=s01a_05==1) %>%
+  filter(jefe==T) %>% select(folio, mujer, jefe) %>% inner_join(eh21v) %>%
+  group_by(depto,mujer) %>% summarise(mean(tierra)*100)
+
+
+#VIVIENDA SIN SERVICIO SANITARIO
+
+table(eh21v$s07a_13)
+
+eh21v %>% mutate(sanitario=s07a_13 == 5) %>% summarise(mean(sanitario))
+
+eh21v <- eh21v %>% mutate(sanitario=s07a_13 == 2)
+
+eh21v %>% group_by(area) %>% summarise(mean(sanitario))
+
+eh21v %>% group_by(depto) %>% summarise(mean(sanitario))
+
+eh21p %>% mutate(mujer=s01a_02==2, jefe=s01a_05==1) %>%
+  filter(jefe==T) %>% select(folio, mujer, jefe) %>% inner_join(eh21v) %>%
+  group_by(depto,mujer) %>% summarise(mean(sanitario)*100)
+
+#VIVIENDA SIN ENERGIA ELECTRICA
+
+table(eh21v$s07a_16)
+
+eh21v %>% mutate(energia=s07a_16 == 2) %>% summarise(mean(energia))
+
+eh21v <- eh21v %>% mutate(energia=s07a_16 == 2)
+
+eh21v %>% group_by(area) %>% summarise(mean(energia))
+
+eh21v %>% group_by(depto) %>% summarise(mean(energia))
+
+eh21p %>% mutate(mujer=s01a_02==2, jefe=s01a_05==1) %>%
+  filter(jefe==T) %>% select(folio, mujer, jefe) %>% inner_join(eh21v) %>%
+  group_by(depto,mujer) %>% summarise(mean(energia)*100)
+
+#VIVIENDA COMBUSTIBLE LENA O GUANO O BOLSA TAQUIA
+
+table(eh21v$s07a_22)
+
+eh21v %>% mutate(lena=s07a_22 == 1 | s07a_22 == 2) %>% summarise(mean(lena))
+
+eh21v <- eh21v %>% mutate(lena=s07a_22 == 2)
+
+eh21v %>% group_by(area) %>% summarise(mean(lena))
+
+eh21v %>% group_by(depto) %>% summarise(mean(lena))
+
+eh21p %>% mutate(mujer=s01a_02==2, jefe=s01a_05==1) %>%
+  filter(jefe==T) %>% select(folio, mujer, jefe) %>% inner_join(eh21v) %>%
+  group_by(depto,mujer) %>% summarise(mean(lena)*100)
+
+
+```
